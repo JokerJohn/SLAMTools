@@ -1,0 +1,10 @@
+Dataset	X Avg Error (m)	Y Avg Error (m)	Z Avg Error (m)	Transformation Matrix
+Proposed	0.0065	0.0072	0.0073
+Identity (not aligned)
+
+FL2	0.4992	0.3910	0.0441
+Identity (not aligned)
+
+HDL	0.9556	1.3078	0.0401
+Identity (not aligned)
+
