@@ -34,3 +34,7 @@ Our sensor suit:
 ### eval_xyz_viewer.py
 
 ![image-20231026172350083](README/image-20231026172350083.png)
+
+### eval_xyz_viewer_colorbar
+
+![image-20231026201317236](README/image-20231026201317236.png)

@@ -1,10 +1,15 @@
 Dataset	X Avg Error (m)	Y Avg Error (m)	Z Avg Error (m)	Transformation Matrix
-Proposed	0.0065	0.0072	0.0073
+GNSS1	0.1873	0.1677	0.0737
 Identity (not aligned)
 
-FL2	0.4992	0.3910	0.0441
+GNSS2	0.2866	0.3424	0.0991
 Identity (not aligned)
 
-HDL	0.9556	1.3078	0.0401
+SBG	2.6619	1.3862	19.5607
 Identity (not aligned)
 
+
+--- RMSE Errors ---
+GNSS1	Average RMSE: 0.2894
+GNSS2	Average RMSE: 0.5379
+SBG	Average RMSE: 19.8035

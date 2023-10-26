@@ -52,7 +52,7 @@ def extract_odom_to_tum_format(bag_file, origin, tum_file, variance_threshold):
 # 已知的原点经纬高数据
 origin = {'lat': 22.8901710523756, 'lon': 113.47589813609757, 'alt': 0.07678306745241956}  # 请替换为实际值
 # Rosbag文件路径
-bag_file = '../RTK_GT_Extractor/sample.bag'  # 请替换为实际路径
+bag_file = 'sample.bag'  # 请替换为实际路径
 # 输出的TUM格式文件路径
 tum_file = 'ins_tum_format.txt'  # 请替换为实际路径
 # 斜方差阈值
