@@ -54,7 +54,7 @@ origin = {'lat': 22.8901710523756, 'lon': 113.47589813609757, 'alt': 0.076783067
 # Rosbag文件路径
 bag_file = 'sample.bag'  # 请替换为实际路径
 # 输出的TUM格式文件路径
-tum_file = 'ins_tum_format.txt'  # 请替换为实际路径
+tum_file = os.path.splitext(bag_file)[0] + "_ins_tum_format.txt"
 # 斜方差阈值
 variance_threshold = 0.1
 extract_odom_to_tum_format(bag_file, origin, tum_file, variance_threshold)

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 from matplotlib.font_manager import FontProperties
+import os
 
 def load_tum_format_trajectory(file_path):
     data = np.loadtxt(file_path, delimiter=' ')
@@ -68,7 +69,6 @@ def visualize_multiple_euler_over_time(datasets, labels, font):
     plt.show()
 
 
-# Main Execution
 # Adjusted font properties
 font = FontProperties()
 font.set_family('serif')
@@ -77,12 +77,18 @@ font.set_size(12)
 
 # Load data from provided paths
 # file_paths = ["optimized_poses_tum.txt", "global_icp_tum.txt", "fastlio_localization.txt"]
-file_paths = ["sample_gnss1_tum_format.txt", "sample_gnss2_tum_format.txt", "sample_gnss_sbg_tum_format.txt"]
+
+bag_file = 'sample'  # 请替换为实际路径
+filename = os.path.splitext(bag_file)[0]
+
+file_paths = [filename+"_gnss1_tum_format.txt", filename+"_gnss2_tum_format.txt", filename+"_gnss_sbg_tum_format.txt"]
+
+
 datasets_loaded = load_multiple_tum_trajectories(*file_paths)
 # Extract Euler angles for the loaded datasets
 euler_datasets_loaded = [extract_euler_from_trajectory(data) for data in datasets_loaded]
-# euler_labels_loaded = ["Proposed", "ICP", "HDL"]
 euler_labels_loaded = ["GNSS1", "GNSS2", "SBG"]
+
 # Visualize the Euler angles over time with "Times New Roman" font
 # visualize_euler_over_time(euler_datasets_loaded, euler_labels_loaded, font)
 

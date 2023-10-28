@@ -1,3 +1,5 @@
+import os
+import time
 import rosbag
 from geographiclib.geodesic import Geodesic
 import math
@@ -87,6 +89,11 @@ def extract_gnss_to_tum_format(bag_file, origin, topics, output_files, variance_
 
 # Extract GNSS data from a rosbag and convert it to TUM format
 def extract_gnss_to_tum_format(bag_file, origin, configurations):
+    bag = rosbag.Bag(bag_file, 'r')
+    total_messages = sum(1 for _ in bag.read_messages())
+    processed_messages = 0
+    start_processing_time = time.time()
+
     for config in configurations:
         topic = config['topic']
         tum_file = config['output_file']
@@ -96,6 +103,17 @@ def extract_gnss_to_tum_format(bag_file, origin, configurations):
             tum_data = []
             last_x, last_y = None, None
             for _, msg, t in bag.read_messages(topics=[topic]):
+                
+                 # 更新进度
+                processed_messages += 1
+                elapsed_time = time.time() - start_processing_time
+                speed = processed_messages / elapsed_time
+                percentage = (processed_messages / total_messages) * 100
+                print(f"\rProcessed: {processed_messages}/{total_messages} messages | "
+                    f"Speed: {speed:.2f} msgs/sec | "
+                    f"Elapsed Time: {elapsed_time:.2f} seconds | "
+                    f"Progress: {percentage:.2f}%", end='')
+
                 # Get latitude, longitude, and altitude
                 lat = msg.latitude
                 lon = msg.longitude
@@ -121,27 +139,30 @@ def extract_gnss_to_tum_format(bag_file, origin, configurations):
             print(f"An error occurred while processing topic {topic}: {e}")
 
 
+
+
 # 已知的原点经纬高数据
 origin = {'lat': 22.8901710523756, 'lon': 113.47589813609757, 'alt': 0.07678306745241956}  # 请替换为实际值
 # Rosbag文件路径
 bag_file = 'sample.bag'  # 请替换为实际路径
+file_name = os.path.splitext(bag_file)[0] 
 
 # Configurations for topics, output files, and variance thresholds
 configurations = [
     {
         'topic': '/3dm_ins/gnss1/fix',
-        'output_file': 'sample_gnss1_tum_format.txt',
+        'output_file': file_name + '_gnss1_tum_format.txt',
         'variance_threshold': 0.1
     },
     {
         'topic': '/3dm_ins/gnss2/fix',
-        'output_file': 'sample_gnss2_tum_format.txt',
-        'variance_threshold': 0.2
+        'output_file': file_name + '_gnss2_tum_format.txt',
+        'variance_threshold': 0.1
     },
     {
         'topic': '/imu/nav_sat_fix',
-        'output_file': 'sample_gnss_sbg_tum_format.txt',
-        'variance_threshold': 1.0
+        'output_file': file_name + '_gnss_sbg_tum_format.txt',
+        'variance_threshold': 10.0
     }
 ]
 extract_gnss_to_tum_format(bag_file, origin, configurations)

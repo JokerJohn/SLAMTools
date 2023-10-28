@@ -53,6 +53,8 @@ def visualize_final_complete_trajectories_3D(datasets, ax, labels, font):
     ax.w_xaxis.line.set_linewidth(1.5)
     ax.w_yaxis.line.set_color("black")
     ax.w_yaxis.line.set_linewidth(1.5)
+    ax.w_zaxis.line.set_color("black")
+    ax.w_zaxis.line.set_linewidth(1.5)
     ax.set_xlabel('X [m]', fontproperties=font)
     ax.set_ylabel('Y [m]', fontproperties=font)
     ax.set_zlabel('Z [m]', fontproperties=font)
@@ -122,18 +124,20 @@ font.set_size(12)
 
 
 # Load the data
-datasets = [load_tum_format_trajectory("sample_gnss1_tum_format.txt"),
-            load_tum_format_trajectory("sample_gnss2_tum_format.txt"),
-            load_tum_format_trajectory('sample_gnss_sbg_tum_format.txt') ,
-            load_tum_format_trajectory("ins_tum_format.txt")]
-
+filename = "sample"
+datasets = [load_tum_format_trajectory(filename + "_gnss1_tum_format.txt"),
+            load_tum_format_trajectory(filename + "_gnss2_tum_format.txt"),
+            load_tum_format_trajectory(filename + "_gnss_sbg_tum_format.txt"),
+            load_tum_format_trajectory(filename + "_ins_tum_format.txt")]
 labels = ["GNSS1", "GNSS2", "SBG","INS"]
+
+# 过滤空的数据集并更新标签
+datasets, labels = zip(*[(data, label) for data, label in zip(datasets, labels) if not data.empty])
 
 # Plot final complete 2D trajectories
 fig_2d, ax_2d = plt.subplots(figsize=(8, 6))
 visualize_final_complete_trajectories_2D(datasets, ax_2d, labels, font)
 plt.tight_layout()
-
 
 # Plot final complete 3D trajectories
 fig_3d = plt.figure(figsize=(8, 6))
@@ -141,14 +145,11 @@ ax_3d = fig_3d.add_subplot(111, projection='3d')
 visualize_final_complete_trajectories_3D(datasets, ax_3d, labels, font)
 plt.tight_layout()
 
-
 # Visualize x, y, z trajectories over time with adjustments
-# visualize_xyz_over_time_adjusted(datasets, labels, font)
 fig_time = visualize_xyz_over_time_adjusted_v2(datasets, labels, font)
-
 plt.tight_layout()
-
 plt.show()
+
 fig_3d.savefig("3D_trajectory_visualization.pdf", bbox_inches='tight', dpi=300)
 fig_2d.savefig("2D_trajectory_visualization.pdf", bbox_inches='tight', dpi=300)
 fig_time.savefig("XYZ_over_time_visualization.pdf", bbox_inches='tight', dpi=300)

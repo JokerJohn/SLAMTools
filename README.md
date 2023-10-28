@@ -37,4 +37,6 @@ Our sensor suit:
 
 ### eval_xyz_viewer_colorbar
 
-![image-20231026201317236](README/image-20231026201317236.png)
+![image-20231027030705921](./README/image-20231027030705921.png)
+
+![image-20231027052000703](README/image-20231027052000703.png)

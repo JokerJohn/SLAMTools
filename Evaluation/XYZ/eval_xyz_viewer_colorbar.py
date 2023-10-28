@@ -352,26 +352,20 @@ def align_trajectories_umeyama(test_data, ground_truth, time_threshold=0.01, wit
     src_points = np.array(src_points)
     tgt_points = np.array(tgt_points)
 
-    # if use_6dof:
-    #     transformation_matrix_3d = umeyama(src_points[:, :2], tgt_points[:, :2], with_scale)
-    #     aligned_xyz = np.dot(transformation_matrix_3d, np.vstack((test_data['tx'], test_data['ty'], np.ones(test_data['tx'].shape))))
-    #     test_data['tx'] = aligned_xyz[0]
-    #     test_data['ty'] = aligned_xyz[1]
-    # else:
     transformation_matrix = umeyama(src_points, tgt_points, with_scale, use_6dof)
     
     # Transform the test_data using the transformation matrix
-    homogenous_coords = np.ones((len(test_data['tx']), 4))
-    homogenous_coords[:, :3] = np.array([test_data['tx'], test_data['ty'], test_data['tz']]).T
-    transformed_coords = (transformation_matrix @ homogenous_coords.T).T
-    test_data['tx'] = transformed_coords[:, 0]
-    test_data['ty'] = transformed_coords[:, 1]
-    test_data['tz'] = transformed_coords[:, 2]
+    # homogenous_coords = np.ones((len(test_data['tx']), 4))
+    # homogenous_coords[:, :3] = np.array([test_data['tx'], test_data['ty'], test_data['tz']]).T
+    # transformed_coords = (transformation_matrix @ homogenous_coords.T).T
+    # test_data['tx'] = transformed_coords[:, 0]
+    # test_data['ty'] = transformed_coords[:, 1]
+    # test_data['tz'] = transformed_coords[:, 2]
     
-    # aligned_xyz = np.dot(transformation_matrix, np.vstack((test_data['tx'], test_data['ty'], test_data['tz'], np.ones(test_data['tx'].shape))))
-    # test_data['tx'] = aligned_xyz[0]
-    # test_data['ty'] = aligned_xyz[1]
-    # test_data['tz'] = aligned_xyz[2]
+    aligned_xyz = np.dot(transformation_matrix, np.vstack((test_data['tx'], test_data['ty'], test_data['tz'], np.ones(test_data['tx'].shape))))
+    test_data['tx'] = aligned_xyz[0]
+    test_data['ty'] = aligned_xyz[1]
+    test_data['tz'] = aligned_xyz[2]
 
     if return_matrix:
         return test_data, transformation_matrix
@@ -400,20 +394,31 @@ def compute_xyz_errors_with_alignment(test_datasets, ground_truth, align=False, 
         y_error = []
         z_error = []
         valid_timestamps = []
+        rmse_errors=[]
+        ate_rmses=[]
         for t, x, y, z in zip(test_data['timestamp'], test_data['tx'], test_data['ty'], test_data['tz']):
             idx = find_nearest_timestamp_index(ground_truth['timestamp'], t)
             if abs(ground_truth['timestamp'][idx] - t) <= time_threshold:
-                x_error.append(x - ground_truth['tx'][idx])
-                y_error.append(y - ground_truth['ty'][idx])
-                z_error.append(z - ground_truth['tz'][idx])
+                dx = x - ground_truth['tx'][idx]
+                dy = y - ground_truth['ty'][idx]
+                dz = z - ground_truth['tz'][idx]
+                rmse_error = np.sqrt(dx**2 + dy**2 + dz**2)
+                x_error.append(dx)
+                y_error.append(dy)
+                z_error.append(dz)
+                rmse_errors.append(rmse_error)
                 valid_timestamps.append(t)
+            # Compute the ATE RMSE for the entire trajectory
+        ate_rmse = np.mean(rmse_errors)
         errors.append({
             'timestamp': valid_timestamps,
             'x_error': x_error,
             'y_error': y_error,
-            'z_error': z_error
+            'z_error': z_error,
+            'rmse_errors': rmse_errors
         })
-    return errors
+        ate_rmses.append(ate_rmse)
+    return errors, ate_rmses
 
 def visualize_and_save_trajectories(test_data, ground_truth, labels, filename):
     fig = plt.figure(figsize=(15, 10))
@@ -421,8 +426,8 @@ def visualize_and_save_trajectories(test_data, ground_truth, labels, filename):
 
     # Plot Ground Truth
     ax.plot(ground_truth['tx'], ground_truth['ty'], ground_truth['tz'], 'g-', label="GT", linewidth=2)
-    ax.scatter(ground_truth['tx'][0], ground_truth['ty'][0], ground_truth['tz'][0], c='green', marker='>', s=150, label="Start", zorder=5)
-    ax.scatter(ground_truth['tx'][-1], ground_truth['ty'][-1], ground_truth['tz'][-1], c='red', marker='<', s=150, label="End", zorder=5)
+    ax.scatter(ground_truth['tx'][0], ground_truth['ty'][0], ground_truth['tz'][0], c='green', marker='o', s=100, label="Start", zorder=5)
+    ax.scatter(ground_truth['tx'][-1], ground_truth['ty'][-1], ground_truth['tz'][-1], c='green', marker='<', s=100, label="End", zorder=5)
     
     # Plot Test Data
     for data, label in zip(test_data, labels):
@@ -430,10 +435,10 @@ def visualize_and_save_trajectories(test_data, ground_truth, labels, filename):
          # Mark start and end points
         # Use same color as trajectory for start and end points
         color = ax.lines[-1].get_color()
-        ax.scatter(data['tx'][0], data['ty'][0], data['tz'][0], c=color, marker='>', s=200, zorder=5, label='_nolegend_')
+        ax.scatter(data['tx'][0], data['ty'][0], data['tz'][0], c=color, marker='o', s=200, zorder=5, label='_nolegend_')
         ax.scatter(data['tx'][-1], data['ty'][-1], data['tz'][-1], c=color, marker='<', s=200, zorder=5,label='_nolegend_')
 
-    ax.set_title(f'3D Aligned Trajectories')
+    # ax.set_title(f'3D Aligned Trajectories')
     ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
@@ -535,6 +540,7 @@ def plot_rmse_and_2D_trajectory_line(label, data):
     min_rmse = np.min(rmse_errors)
     fig, axs = plt.subplots(2, 1, figsize=(14, 14), gridspec_kw={'height_ratios': [1, 2]})
     sc = axs[0].scatter(x_coords, y_coords, c=rmse_errors, cmap='jet', s=50)
+    axs[0].set_title(f'2D Trajectory for {label}')
     axs[0].plot(x_coords, y_coords, color='black', linestyle='-', linewidth=1.5, alpha=1.0)
     axs[0].scatter(x_coords[0], y_coords[0], color='red', s=200, label='Start', marker='o')
     axs[0].scatter(x_coords[-1], y_coords[-1], color='green', s=200, label='End', marker='X')
@@ -578,7 +584,7 @@ def plot_3D_trajectory_with_rmse_color_line(title, data):
     ax = fig.add_subplot(111, projection='3d')
     ax.plot(x_coords, y_coords, z_coords, '-', color='black', alpha=1.0, linewidth=1.5)
     sc = ax.scatter(x_coords, y_coords, z_coords, c=rmse, cmap='jet', s=50, label='_nolegend_')
-    
+    ax.set_title(f'3D Trajectory for {title}')
     ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
     ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
@@ -638,6 +644,7 @@ visualize_and_save_trajectories(test_xyz_datasets, ground_truth_xyz, test_labels
 TIME_THRESHOLD = 0.01  # Maximum time difference to consider two timestamps as matching
 aligned_datasets = []
 aligned_matrixs = []
+ate_rmse_values=[]
 for test_data, align_flag in zip(test_xyz_datasets, align_flags):
     if align_flag:
         aligned_data, transformation_matrix = align_trajectories_umeyama(test_data, ground_truth_xyz, time_threshold=TIME_THRESHOLD, use_6dof=True, with_scale=False, return_matrix=True)
@@ -649,17 +656,19 @@ for test_data, align_flag in zip(test_xyz_datasets, align_flags):
 
 
 # Visualize aligned and  original trajectories
-error_datasets_xyz_aligned = compute_xyz_errors_with_alignment(aligned_datasets, ground_truth_xyz, time_threshold=TIME_THRESHOLD, align=True)
+error_datasets_xyz_aligned, ate_rmse_values = compute_xyz_errors_with_alignment(aligned_datasets, ground_truth_xyz, time_threshold=TIME_THRESHOLD, align=True)
 visualize_xyz_errors_multi(error_datasets_xyz_aligned, test_labels, font)
 visualize_and_save_trajectories(aligned_datasets, ground_truth_xyz, test_labels, "aligned_trajectories.pdf")
 
 # Calculate RMSE errors and ATE RMSE for each dataset
 rmse_errors_datasets = []
-ate_rmse_values = []
+# rmse_errors_datasets = [error_data['rmse_errors'] for error_data in error_datasets_xyz_aligned]
+
+# ate_rmse_values = []
 for test_data in test_xyz_datasets:
     rmse_errors, ate_rmse = compute_rmse_errors(test_data, ground_truth_xyz)
     rmse_errors_datasets.append(rmse_errors)
-    ate_rmse_values.append(ate_rmse)
+    # ate_rmse_values.append(ate_rmse)
 # Print the ATE RMSE for each dataset
 for label, ate_rmse in zip(test_labels, ate_rmse_values):
     print(f"ATE RMSE for {label}: {ate_rmse:.4f} m")
