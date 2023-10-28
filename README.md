@@ -1,13 +1,9 @@
 # SLAMTools
-Bag process and evalutaion tools for Dual Antenna RTK Suit
-
 
 
 Our sensor suit:
 
-
-
-
+![image-20231028215323058](./README/image-20231028215323058.png)
 
 
 
@@ -31,7 +27,7 @@ Our sensor suit:
 
 ![image-20231026172239328](README/image-20231026172239328.png)
 
-### eval_xyz_viewer.py
+### eval_xyz_viewer
 
 ![image-20231026172350083](README/image-20231026172350083.png)
 
