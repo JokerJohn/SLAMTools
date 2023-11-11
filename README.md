@@ -9,17 +9,23 @@ Our sensor suit:
 
 ## Viewer
 
+
+
+### pose_graph_cov_2d
+
+![image-20231111105428392](./README/image-20231111105428392.png)
+
 ### tum_traj_viewer
 
-![image-20231026170548391](README/image-20231026170548391.png)
+![image-20231030195632044](./README/image-20231030195632044.png)
 
 ### tum_rpy_viewer
 
-![image-20231026171317367](README/image-20231026171317367.png)
+![image-20231030195727953](./README/image-20231030195727953.png)
 
 ### var_analysis
 
-![image-20231026171822606](README/image-20231026171822606.png)
+![image-20231030200126073](./README/image-20231030200126073.png)
 
 ## Evaluation
 

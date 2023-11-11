@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
+from matplotlib.font_manager import FontProperties
+
 
 # Set global font to Times New Roman
 plt.rcParams['font.family'] = 'Times New Roman'
@@ -193,6 +195,18 @@ data_gnss3 = read_tum_with_variance_for_visualization("output_gnss_sbg_tum_with_
 # plot_data_with_legend_colorbar_adjusted('GNSS1', data_gnss1)
 # plot_data_with_legend_colorbar_adjusted('GNSS2', data_gnss2)
 
+
+font = FontProperties()
+font.set_family('serif')
+font.set_name('Times New Roman')
+font.set_size(10)
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = 'Times New Roman'
+plt.rcParams['axes.labelweight'] = 'normal'
+plt.rcParams['font.size'] = 10
+plt.rcParams['xtick.labelsize'] = 10
+plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['legend.fontsize'] = 10
 
 
 # Prepare a list of data for multiple GNSS sources (for this example, I just replicate the same data)

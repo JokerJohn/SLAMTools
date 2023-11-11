@@ -74,6 +74,13 @@ font = FontProperties()
 font.set_family('serif')
 font.set_name('Times New Roman')
 font.set_size(12)
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['font.serif'] = 'Times New Roman'
+plt.rcParams['axes.labelweight'] = 'normal'
+plt.rcParams['font.size'] = 12
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
+plt.rcParams['legend.fontsize'] = 12
 
 # Load data from provided paths
 # file_paths = ["optimized_poses_tum.txt", "global_icp_tum.txt", "fastlio_localization.txt"]

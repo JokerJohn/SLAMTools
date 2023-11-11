@@ -1,4 +1,5 @@
 ```bash
+# save evo error results, then plot the error with our scripts
 mkdir results
 
 evo_ape tum GT.txt Proposed.txt -a -r trans_part --save_results=results/a.zip && unzip results/a.zip -d results/a
