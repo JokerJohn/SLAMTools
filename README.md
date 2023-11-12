@@ -9,7 +9,17 @@ Our sensor suit:
 
 ## Viewer
 
+### Evaluate with EVO results
 
+first get evo ape and rpe results as `test.zip` and `test_rpe.zip`
+
+![image-20231112140452898](./README/image-20231112140452898.png)
+
+
+
+### Run_time_analysis
+
+![image-20231112140414855](./README/image-20231112140414855.png)
 
 ### pose_graph_cov_2d
 
