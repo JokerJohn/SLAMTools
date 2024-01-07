@@ -12,3 +12,6 @@
 python3 tum_traj_viewer_multi_path.py
 ```
 
+
+
+![image-20240107161744412](./readme/image-20240107161744412.png)
