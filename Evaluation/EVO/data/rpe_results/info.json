@@ -1,0 +1,1 @@
+{"title": "RPE w.r.t. translation part (m)\nfor delta = 1 (frames) using consecutive pairs\n(with SE(3) Umeyama alignment)", "ref_name": "GT.txt", "est_name": "optimized_poses_tum.txt", "label": "RPE (m)"}

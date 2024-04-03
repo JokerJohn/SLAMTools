@@ -13,11 +13,26 @@ Our sensor suit:
 
 first get evo ape and rpe results as `test.zip` and `test_rpe.zip`
 
+```python
+#dependence
+pip3 install zipfile pandas matplotlib numpy
+#run
+python3 evo_eval_viewer.py
+```
+
 ![image-20231112140452898](./README/image-20231112140452898.png)
 
 
 
 ### Run_time_analysis
+
+```python
+#denpendence
+pip3 install matplotlib pandas
+
+#run
+python3 time_analysis.py
+```
 
 ![image-20231112140414855](./README/image-20231112140414855.png)
 
