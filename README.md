@@ -32,6 +32,10 @@ pip3 install matplotlib pandas
 
 #run
 python3 time_analysis.py
+
+# 1698490753.03 0.135222 221.497434 0.022776 0.491802 236.377261 0.651435 1194.924191 0.132663 3.51924 0
+# timestamp module1_time module2_time module3_time module4_time total_time module1_total_time module2_total_time module13_tota_time module4_total_time 
+# since we just use module2_time and module4_time, we can get the following figure.
 ```
 
 ![image-20231112140414855](./README/image-20231112140414855.png)
