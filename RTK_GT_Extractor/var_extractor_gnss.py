@@ -29,75 +29,67 @@ def extract_gnss_data_with_xy_variance(bag_file, origin, configurations):
     for config in configurations:
         topic = config['topic']
         tum_file = config['output_file']
+        tum_file_with_variance = tum_file.replace('.txt', '_with_variance.txt')
         try:
             bag = rosbag.Bag(bag_file, 'r')
             tum_data = []
-            variances_x = []
-            variances_y = []
-            variances_z = []
-            timestamps = []
+            tum_data_with_variance = []
             last_x, last_y = None, None
             for _, msg, t in bag.read_messages(topics=[topic]):
-                # Get latitude, longitude, altitude, and variances
                 lat = msg.latitude
                 lon = msg.longitude
                 alt = msg.altitude
                 variance_x = msg.position_covariance[0]
-                variance_y = msg.position_covariance[4]  # Extracting y variance
+                variance_y = msg.position_covariance[4]
                 variance_z = msg.position_covariance[8]
-                # Convert to local coordinates
                 x, y, z = convert_lat_lon_alt_to_xyz(lat, lon, alt, origin)
-                # Compute the yaw angle
+                # only consider the yaw angle when there are at least two points in the same plane
                 if last_x is not None and last_y is not None:
                     yaw = compute_yaw(last_x, last_y, x, y)
                     qx, qy, qz, qw = (0, 0, math.sin(yaw/2), math.cos(yaw/2))
                 else:
                     qx, qy, qz, qw = (0, 0, 0, 1)
                 last_x, last_y = x, y
-                # Append to lists
-                tum_data.append(f"{t.to_sec()} {x} {y} {z} {qx} {qy} {qz} {qw} {variance_x} {variance_y} {variance_z}")
-                variances_x.append(variance_x)
-                variances_y.append(variance_y)
-                variances_z.append(variance_z)
-                timestamps.append(t.to_sec())
-            # Save to a TUM format file with appended variances
+
+                tum_data.append("{} {} {} {:.6f} {:.6f} {:.6f} {:.6f} {:.6f}".format(t.to_sec(), x, y, z, qx, qy, qz, qw))
+                tum_data_with_variance.append("{} {} {} {:.6f} {:.6f} {:.6f} {:.6f} {:.6f} {:.6f} {:.6f} {:.6f}".format(t.to_sec(), x, y, z, qx, qy, qz, qw, variance_x, variance_y, variance_z))
             with open(tum_file, 'w') as file:
                 file.write("\n".join(tum_data))
-            results[topic] = {
-                "timestamps": timestamps,
-                "variances_x": variances_x,
-                "variances_y": variances_y,
-                "variances_z": variances_z,
-            }
+            with open(tum_file_with_variance, 'w') as file:
+                file.write("\n".join(tum_data_with_variance))
+            print("Data successfully saved to {} and {}".format(tum_file, tum_file_with_variance))
         except Exception as e:
-            print(f"An error occurred while processing topic {topic}: {e}")
+            print("An error occurred while processing topic {}: {}".format(topic, e))
     return results
 
 
 
+# 请替换为实际GNSS origin
+origin = {'lat': 22.8901710523756, 'lon': 113.47589813609757, 'alt': 0.07678306745241956}  
 
-origin = {'lat': 22.890390399999998, 'lon': 113.4753985, 'alt': -0.252}
 # Path to the rosbag file
-bag_file = '../RTK_GT_Extractor/sample.bag'  # Replace with your rosbag path
-# bag_file = '/media/xchu/e81eaf80-d92c-413a-a503-1c9b35b19963/home/xchu/data/udi_fusion_2023-04-12-17-05-35.bag'  # Replace with your rosbag path
+bag_file = 'sample.bag'  # Replace with your rosbag path
 
 # Configurations for topics, output files, and variance thresholds
+# only save the gnss points with variance lower than the threshold
+# only support NavSatFix message type
 configurations = [
     {
         'topic': '/3dm_ins/gnss1/fix',
-        'output_file': 'output_gnss1_tum_with_variance.txt',
-        'variance_threshold': 10
+        'output_file': 'output_gnss1_tum.txt',
+        'variance_threshold': 0.8
     },
     {
         'topic': '/3dm_ins/gnss2/fix',
-        'output_file': 'output_gnss2_tum_with_variance.txt',
-        'variance_threshold': 10
+        'output_file': 'output_gnss2_tum.txt',
+        'variance_threshold': 0.1
     },
     {
         'topic': '/imu/nav_sat_fix',
-        'output_file': 'output_gnss_sbg_tum_with_variance.txt',
-        'variance_threshold': 10
+        'output_file': 'output_gnss_sbg_tum.txt',
+        'variance_threshold': 100
     }
 ]
 # Extract data from the rosbag
+# save tum format and tum with cov data to file
 extracted_data = extract_gnss_data_with_xy_variance(bag_file, origin, configurations)

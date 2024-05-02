@@ -9,7 +9,7 @@ plt.rcParams['font.size'] = 18
 # Create a figure and a subplot
 fig, ax = plt.subplots(figsize=(2, 8))
 # Create the colorbar
-norm = plt.Normalize(20, 0)  # Set the limits of the colorbar
+norm = plt.Normalize(50, 0)  # Set the limits of the colorbar
 cb = fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), cax=ax)
 # Set the label of the colorbar
 cb.set_label('Error (cm)', rotation=90, labelpad=10)
