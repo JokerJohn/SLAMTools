@@ -1,9 +1,22 @@
 # SLAMTools
 
+This is a script toolkit for SLAM research, including but not limited to various plotting functions, ROS bag processing, and more.
 
-Our sensor suit:
+| Function                                  | scripts | demo                                                         |
+| ----------------------------------------- | ------- | ------------------------------------------------------------ |
+| Plot Error with EVO results               |         | ![image-20231112140452898](./README/image-20231112140452898.png) |
+| Plot comparative Error                    |         | ![image-20240809100007556](./README/image-20240809100007556.png) |
+| Plot Graph error                          |         | ![image-20240809100128967](./README/image-20240809100128967.png) |
+| Plot Error with colorbar                  |         | ![image-20231027030705921](./README/image-20231027030705921.png) |
+| Plot pose cov                             |         | ![image-20231111105428392](./README/image-20231111105428392.png) |
+| Visualize 2D/3D trajectory                |         | ![image-20231030195632044](./README/image-20231030195632044.png) |
+| Visualize RPY                             |         | ![image-20231030195727953](./README/image-20231030195727953.png) |
+| Visualize Position and rotation over time |         | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
+| Analysis  GNSS covariance                 |         | ![image-20231030200126073](./README/image-20231030200126073.png) |
+| Run-time  analysis                        |         | ![image-20231112140414855](./README/image-20231112140414855.png) |
+| Run-time analysis comparative             |         | ![image-20240809095931048](./README/image-20240809095931048.png) |
 
-![image-20231028215323058](./README/image-20231028215323058.png)
+
 
 
 
@@ -20,10 +33,6 @@ pip3 install zipfile pandas matplotlib numpy
 python3 evo_eval_viewer.py
 ```
 
-![image-20231112140452898](./README/image-20231112140452898.png)
-
-
-
 ### Run_time_analysis
 
 ```python
@@ -39,38 +48,26 @@ python3 time_analysis.py
 # ref to paper: PALoc https://ieeexplore.ieee.org/document/10480308
 ```
 
-![image-20231112140414855](./README/image-20231112140414855.png)
-
 ### pose_graph_cov_2d
-
-![image-20231111105428392](./README/image-20231111105428392.png)
 
 ### tum_traj_viewer
 
-![image-20231030195632044](./README/image-20231030195632044.png)
-
 ### tum_rpy_viewer
 
-![image-20231030195727953](./README/image-20231030195727953.png)
-
 ### var_analysis
-
-![image-20231030200126073](./README/image-20231030200126073.png)
 
 ## Evaluation
 
 ### eval_rpy_viewer.py
 
-![image-20231026172239328](README/image-20231026172239328.png)
-
 ### eval_xyz_viewer
-
-![image-20231026172350083](README/image-20231026172350083.png)
 
 ### eval_xyz_viewer_colorbar
 
-![image-20231027030705921](./README/image-20231027030705921.png)
 
-![image-20231028215632469](./README/image-20231028215632469.png)
 
-![image-20231028215753179](./README/image-20231028215753179.png)
+## Contributors
+
+<a href="https://github.com/JokerJohn/SLAMTools/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=JokerJohn/SLAMTools" />
+</a>
