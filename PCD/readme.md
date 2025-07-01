@@ -20,7 +20,19 @@ multithread process
     with multiprocessing.Pool(processes=10) as pool:
 ```
 
+## merge_las_to_pcd.py
 
+put the las file in the same folder and set the folder path, this script can merge all the las into a pcd file, together with single pcd files.
+
+```python
+python3 merge_las_to_pcd.py
+```
+
+![image-20250701181419521](./readme/image-20250701181419521.png)
+
+![image-20250701181505922](./readme/image-20250701181505922.png)
+
+![image-20250701181519207](./readme/image-20250701181519207.png)
 
 ## merge_map_from_scan
 

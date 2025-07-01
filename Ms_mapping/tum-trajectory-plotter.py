@@ -74,7 +74,7 @@ def plot_trajectories(trajectories, labels, colors):
 
 def main():
     # 设置位姿文件所在的文件夹地址
-    pose_folder = "/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1-PK1-IA3-IA4-NG/merged_results"  # 请替换为实际的文件夹路径
+    pose_folder = "/home/xchu/data/pose_slam_prior_result/PK1-RB2-RB3-TEST/merged_results"  # 请替换为实际的文件夹路径
 
     
     # 定义前8个颜色

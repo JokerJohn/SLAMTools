@@ -18,7 +18,7 @@ def quaternion_to_rotation_matrix(qx, qy, qz, qw):
         [2 * (qx * qz - qw * qy), 2 * (qy * qz + qw * qx), 1 - 2 * (qx ** 2 + qy ** 2)]
     ])
 def main():
-    folder = '/home/xchu/data/prior_map/20230710-final/'
+    folder = '/home/xchu/data/pose_slam_result/exp05/'
     pose_file = folder + 'optimized_odom_tum.txt'
     pcd_folder = folder + 'key_point_frame'
     output_file = folder + 'merged_map.pcd'
@@ -37,7 +37,7 @@ def main():
         pcd_down.rotate(rotation_matrix, center=(0, 0, 0))
         pcd_down.translate(translation_vector)
         merged_pcd += pcd_down
-    merged_pcd = merged_pcd.voxel_down_sample(voxel_size=0.5)
+    merged_pcd = merged_pcd.voxel_down_sample(voxel_size=0.3)
     o3d.io.write_point_cloud(output_file, merged_pcd)
 
 if __name__ == '__main__':

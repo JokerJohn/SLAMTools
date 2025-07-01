@@ -100,16 +100,11 @@ def process_session(session_info, poses, output_folder, session_num, num_threads
 
 def main():
     # Configuration
-    new_pcd_folder = '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1-PK1-IA3-IA4-NG'
+    new_pcd_folder = '/home/xchu/data/pose_slam_prior_result/PK1-RB2-RB3-TEST'
 
     old_pcd_folders = [
-        '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1-PK1-IA3-IA4',
-        '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1-PK1-IA3',
-        '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1-PK1',
-        '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1-CC1',
-        '/media/xchu/UBUNTU 20_0/results_ms/CP05-CP02-CS1',
-        '/home/xchu/data/pose_slam_prior_result/CP05-CP02',
-        # Add more old folders as needed
+        '/home/xchu/data/pose_slam_prior_result/PK1-RB2-TEST',
+        '/home/xchu/data/prior_map/PK01'
     ]
 
     pose_file = os.path.join(new_pcd_folder, 'optimized_poses_tum.txt')

@@ -5,10 +5,64 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from scipy.interpolate import interp1d
 from scipy.spatial.transform import Rotation as R
+
 def euler_to_quaternion(roll, pitch, yaw):
     """将欧拉角(r,p,h)转换为四元数(qx,qy,qz,qw)"""
-    rot = R.from_euler('xyz', [roll, pitch, yaw])
+    # rot = R.from_euler('xyz', [roll, pitch, yaw])
+    R = getRotationMatrixFromEulerAnglesRollPitchYaw(roll, pitch, yaw)
+
     return rot.as_quat()  # 返回 [qx, qy, qz, qw]
+
+# def euler_to_quaternion(roll, pitch, yaw):
+#     """
+#     将欧拉角(r,p,h)转换为四元数(qx,qy,qz,qw)
+#     使用航空顺序ZYX (yaw-pitch-roll)
+#     输入单位为弧度
+#     处理万向锁问题
+#     """
+#     # 检查奇异点
+#     if abs(abs(pitch) - np.pi/2) < 1e-6:
+#         print(f"Warning: Gimbal lock detected at pitch = {pitch:.6f} rad (near ±90°)")
+#         # 在奇异点附近，可以添加小扰动避免严格奇异
+#         if pitch > 0:
+#             pitch = np.pi/2 - 1e-6
+#         else:
+#             pitch = -np.pi/2 + 1e-6
+#     # 使用正确的旋转顺序'zyx'
+#     rot = R.from_euler('zyx', [yaw, pitch, roll])
+#     quat = rot.as_quat()  # 返回 [qx, qy, qz, qw]
+#     # 确保四元数是归一化的
+#     norm = np.sqrt(np.sum(quat**2))
+#     if abs(norm - 1.0) > 1e-10:
+#         quat = quat / norm
+#     return quat
+
+
+def getRotationMatrixFromEulerAnglesRollPitchYaw(roll_rad, pitch_rad, yaw_rad):
+  R_yaw = np.array([[np.cos(yaw_rad), -np.sin(yaw_rad), 0.0], 
+                     [np.sin(yaw_rad), np.cos(yaw_rad), 0.0], 
+                     [0.0, 0.0, 1.0]])
+
+  R_pitch = np.array([[np.cos(pitch_rad), 0.0, np.sin(pitch_rad)], 
+                     [0.0, 1.0, 0.0], 
+                     [-np.sin(pitch_rad), 0.0, np.cos(pitch_rad)]])
+
+  R_roll = np.array([[1.0, 0.0, 0.0], 
+                    [0.0, np.cos(roll_rad), -np.sin(roll_rad)], 
+                    [0.0, np.sin(roll_rad), np.cos(roll_rad)]])
+
+  R = np.dot(np.dot(R_yaw, R_pitch), R_roll)
+  return R
+
+
+
+# def getQuaternionFromFromEulerAnglesRollPitchYawRad(roll_rad, pitch_rad, yaw_rad):
+#   R = getRotationMatrixFromEulerAnglesRollPitchYaw(roll_rad, pitch_rad, yaw_rad)
+#   #assert(np.linalg.det(R) == 1.0)
+#   q = mk.Quaternion(R)
+
+  return q
+
 def find_nearest_cov_value(timestamp, t_cov, cov_data):
     """为每个时间戳找到最近的协方差值"""
     idx = np.abs(t_cov - timestamp).argmin()
@@ -45,9 +99,10 @@ def main(args):
             x, y, z = gt[i, 1:4]  # 位置 (北, 东, 下)
             roll, pitch, yaw = gt[i, 4:7]  # 欧拉角 (r, p, h)
             # 欧拉角转四元数
-            qx, qy, qz, qw = euler_to_quaternion(roll, pitch, yaw)
+            # qx, qy, qz, qw = euler_to_quaternion(roll, pitch, yaw)
+            qx, qy, qz, qw = getQuaternionFromFromEulerAnglesRollPitchYawRad(roll, pitch, yaw)
             # 写入TUM格式: 时间戳 x y z qx qy qz qw
-            f.write(f"{t:.9f} {x:.6f} {y:.6f} {z:.6f} {qx:.6f} {qy:.6f} {qz:.6f} {qw:.6f}\n")
+            f.write(f"{t:.9f} {x:.9f} {y:.9f} {z:.9f} {qx:.9f} {qy:.9f} {qz:.9f} {qw:.9f}\n")
     # 设置Matplotlib参数以获得期刊级别的图形
     mpl.rcParams.update({
         'font.family': 'Times New Roman',
