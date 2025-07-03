@@ -22,7 +22,7 @@ multithread process
 
 ## merge_las_to_pcd.py
 
-put the las file in the same folder and set the folder path, this script can merge all the las into a pcd file, together with single pcd files.
+put the las file in the same folder and set the folder path, this script can merge all the las into a pcd file, together with single pcd files. this can be used for f
 
 ```python
 python3 merge_las_to_pcd.py

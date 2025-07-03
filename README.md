@@ -2,19 +2,19 @@
 
 This is a script toolkit for SLAM research, including but not limited to various plotting functions, ROS bag processing, and more.
 
-| Function                                  | scripts | demo                                                         |
-| ----------------------------------------- | ------- | ------------------------------------------------------------ |
-| Plot Error with EVO results               |         | ![image-20231112140452898](./README/image-20231112140452898.png) |
-| Plot comparative Error                    |         | ![image-20240809100007556](./README/image-20240809100007556.png) |
-| Plot Graph error                          |         | ![image-20240809100128967](./README/image-20240809100128967.png) |
-| Plot Error with colorbar                  |         | ![image-20231027030705921](./README/image-20231027030705921.png) |
-| Plot pose cov                             |         | ![image-20231111105428392](./README/image-20231111105428392.png) |
-| Visualize 2D/3D trajectory                |         | ![image-20231030195632044](./README/image-20231030195632044.png) |
-| Visualize RPY                             |         | ![image-20231030195727953](./README/image-20231030195727953.png) |
-| Visualize Position and rotation over time |         | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
-| Analysis  GNSS covariance                 |         | ![image-20231030200126073](./README/image-20231030200126073.png) |
-| Run-time  analysis                        |         | ![image-20231112140414855](./README/image-20231112140414855.png) |
-| Run-time analysis comparative             |         | ![image-20240809095931048](./README/image-20240809095931048.png) |
+| Function                                  | scripts           | demo                                                         |
+| ----------------------------------------- | ----------------- | ------------------------------------------------------------ |
+| Plot Error with EVO results               |                   | ![image-20231112140452898](./README/image-20231112140452898.png) |
+| Plot comparative Error                    |                   | ![image-20240809100007556](./README/image-20240809100007556.png) |
+| Plot Graph error                          |                   | ![image-20240809100128967](./README/image-20240809100128967.png) |
+| Plot Error with colorbar                  |                   | ![image-20231027030705921](./README/image-20231027030705921.png) |
+| Plot pose cov                             | pose_graph_cov_2d | ![image-20231111105428392](./README/image-20231111105428392.png) |
+| Visualize 2D/3D trajectory                |                   | ![image-20231030195632044](./README/image-20231030195632044.png) |
+| Visualize RPY                             |                   | ![image-20231030195727953](./README/image-20231030195727953.png) |
+| Visualize Position and rotation over time |                   | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
+| Analysis  GNSS covariance                 |                   | ![image-20231030200126073](./README/image-20231030200126073.png) |
+| Run-time  analysis                        |                   | ![image-20231112140414855](./README/image-20231112140414855.png) |
+| Run-time analysis comparative             |                   | ![image-20240809095931048](./README/image-20240809095931048.png) |
 
 
 
@@ -48,23 +48,17 @@ python3 time_analysis.py
 # ref to paper: PALoc https://ieeexplore.ieee.org/document/10480308
 ```
 
-### pose_graph_cov_2d
+## Dataset With GT Map
 
-### tum_traj_viewer
-
-### tum_rpy_viewer
-
-### var_analysis
-
-## Evaluation
-
-### eval_rpy_viewer.py
-
-### eval_xyz_viewer
-
-### eval_xyz_viewer_colorbar
-
-
+| Dataset          | sequence                   | GT Map                           | GT Traj.                      |
+| ---------------- | -------------------------- | -------------------------------- | ----------------------------- |
+| FusionPortable   | except for campus_day      | :heavy_check_mark:(LEICA)​        | :heavy_check_mark:(map reg.)  |
+| FusionPortableV2 | except for tunnel/high way | :heavy_check_mark:(LEICA)        | :heavy_check_mark:            |
+| GEODE            | only stairs                | :heavy_check_mark:(LEICA)        | :heavy_check_mark: (map reg.) |
+| MS               | all                        | :heavy_check_mark: (partial map) | :heavy_check_mark: (RTK-INS)  |
+| Newer College    | all                        | :heavy_check_mark: LEICA         | :heavy_check_mark: (map reg.) |
+| SuperLoc         | cave/corridor              | :heavy_check_mark: (sparse)      | :heavy_check_mark: (map reg.) |
+| ...              |                            |                                  |                               |
 
 ## NCLT Tools
 
