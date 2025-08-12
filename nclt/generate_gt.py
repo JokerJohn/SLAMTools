@@ -56,10 +56,10 @@ def getRotationMatrixFromEulerAnglesRollPitchYaw(roll_rad, pitch_rad, yaw_rad):
 
 
 
-# def getQuaternionFromFromEulerAnglesRollPitchYawRad(roll_rad, pitch_rad, yaw_rad):
-#   R = getRotationMatrixFromEulerAnglesRollPitchYaw(roll_rad, pitch_rad, yaw_rad)
-#   #assert(np.linalg.det(R) == 1.0)
-#   q = mk.Quaternion(R)
+def getQuaternionFromFromEulerAnglesRollPitchYawRad(roll_rad, pitch_rad, yaw_rad):
+  R = getRotationMatrixFromEulerAnglesRollPitchYaw(roll_rad, pitch_rad, yaw_rad)
+  #assert(np.linalg.det(R) == 1.0)
+  q = mk.Quaternion(R)
 
   return q
 
@@ -150,5 +150,6 @@ def main(args):
     print(f"TUM format data saved to {output_file}")
     print("Visualization saved to trajectory_visualization.pdf")
     return 0
+
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
