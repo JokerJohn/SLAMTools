@@ -4,17 +4,17 @@ This is a script toolkit for SLAM research, including but not limited to various
 
 | Function                                                     | scripts                                                      | demo                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Plot Error with EVO results                                  |                                                              | ![image-20231112140452898](./README/image-20231112140452898.png) |
+| [evo_eval_viewer.py](Evaluation/EVO/evo_eval_viewer.py)      | Plot Error with EVO evaluation results                       | ![image-20231112140452898](./README/image-20231112140452898.png) |
 | Plot comparative Error                                       |                                                              | ![image-20240809100007556](./README/image-20240809100007556.png) |
-| Plot Graph error                                             |                                                              | ![image-20240809100128967](./README/image-20240809100128967.png) |
+| [graph_error_viewer.py](Ms_mapping/graph_error_viewer.py)    | Plot Graph error                                             | ![image-20240809100128967](./README/image-20240809100128967.png) |
 | Plot Error with colorbar                                     |                                                              | ![image-20231027030705921](./README/image-20231027030705921.png) |
 | [rosbag_trajectory_viz.py](RTK_GT_Extractor/nclt_style/rosbag_trajectory_viz.py) | visualize and extract ins data from rosbag so that we can check and generate ground truth trajectory. | ![image-20250812110552580](README/image-20250812110552580.png) |
-| Plot pose cov                                                | pose_graph_cov_2d                                            | ![image-20231111105428392](./README/image-20231111105428392.png) |
+| [pose_graph_cov_2d.py](COV/pose_graph_cov_2d.py)             | Plot pose cov                                                | ![image-20231111105428392](./README/image-20231111105428392.png) |
 | Visualize 2D/3D trajectory                                   |                                                              | ![image-20231030195632044](./README/image-20231030195632044.png) |
 | Visualize RPY                                                |                                                              | ![image-20231030195727953](./README/image-20231030195727953.png) |
 | Visualize Position and rotation over time                    |                                                              | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
-| Analysis  GNSS covariance                                    |                                                              | ![image-20231030200126073](./README/image-20231030200126073.png) |
-| Run-time  analysis                                           |                                                              | ![image-20231112140414855](./README/image-20231112140414855.png) |
+| [var_analysis.py](RTK_GT_Extractor/var_analysis.py)          | Analysis GNSS covariance                                     | ![image-20231030200126073](./README/image-20231030200126073.png) |
+| [time_analysis.py](Run_Time_analysis/time_analysis.py)       | Run-time  analysis                                           | ![image-20231112140414855](./README/image-20231112140414855.png) |
 | Run-time analysis comparative                                |                                                              | ![image-20240809095931048](./README/image-20240809095931048.png) |
 
 
@@ -63,7 +63,7 @@ python3 time_analysis.py
 
 ## NCLT Tools
 
-### merge raw data to rosbag
+### merge raw data to rosbag  [sensordata_to_rosbag_fastlio.py](nclt/sensordata_to_rosbag_fastlio.py) 
 
 this scripts is modified from faster-lio, but fix some bugs.
 
@@ -75,7 +75,7 @@ set your data file
 python3 sensordata_to_rosbag_fastlio.py 2012-01-22/ 2012-01-22.bag
 ```
 
-### TUM GT Trajectory
+### TUM GT Trajectory  [generate_gt.py](nclt/generate_gt.py) 
 
 download the gt and cov file.
 
