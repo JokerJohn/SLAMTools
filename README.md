@@ -2,19 +2,20 @@
 
 This is a script toolkit for SLAM research, including but not limited to various plotting functions, ROS bag processing, and more.
 
-| Function                                  | scripts           | demo                                                         |
-| ----------------------------------------- | ----------------- | ------------------------------------------------------------ |
-| Plot Error with EVO results               |                   | ![image-20231112140452898](./README/image-20231112140452898.png) |
-| Plot comparative Error                    |                   | ![image-20240809100007556](./README/image-20240809100007556.png) |
-| Plot Graph error                          |                   | ![image-20240809100128967](./README/image-20240809100128967.png) |
-| Plot Error with colorbar                  |                   | ![image-20231027030705921](./README/image-20231027030705921.png) |
-| Plot pose cov                             | pose_graph_cov_2d | ![image-20231111105428392](./README/image-20231111105428392.png) |
-| Visualize 2D/3D trajectory                |                   | ![image-20231030195632044](./README/image-20231030195632044.png) |
-| Visualize RPY                             |                   | ![image-20231030195727953](./README/image-20231030195727953.png) |
-| Visualize Position and rotation over time |                   | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
-| Analysis  GNSS covariance                 |                   | ![image-20231030200126073](./README/image-20231030200126073.png) |
-| Run-time  analysis                        |                   | ![image-20231112140414855](./README/image-20231112140414855.png) |
-| Run-time analysis comparative             |                   | ![image-20240809095931048](./README/image-20240809095931048.png) |
+| Function                                                     | scripts                                                      | demo                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Plot Error with EVO results                                  |                                                              | ![image-20231112140452898](./README/image-20231112140452898.png) |
+| Plot comparative Error                                       |                                                              | ![image-20240809100007556](./README/image-20240809100007556.png) |
+| Plot Graph error                                             |                                                              | ![image-20240809100128967](./README/image-20240809100128967.png) |
+| Plot Error with colorbar                                     |                                                              | ![image-20231027030705921](./README/image-20231027030705921.png) |
+| [rosbag_trajectory_viz.py](RTK_GT_Extractor/nclt_style/rosbag_trajectory_viz.py) | visualize and extract ins data from rosbag so that we can check and generate ground truth trajectory. | ![image-20250812110552580](README/image-20250812110552580.png) |
+| Plot pose cov                                                | pose_graph_cov_2d                                            | ![image-20231111105428392](./README/image-20231111105428392.png) |
+| Visualize 2D/3D trajectory                                   |                                                              | ![image-20231030195632044](./README/image-20231030195632044.png) |
+| Visualize RPY                                                |                                                              | ![image-20231030195727953](./README/image-20231030195727953.png) |
+| Visualize Position and rotation over time                    |                                                              | ![image-20231026172239328](README/image-20231026172239328.png)![image-20231026172350083](README/image-20231026172350083.png) |
+| Analysis  GNSS covariance                                    |                                                              | ![image-20231030200126073](./README/image-20231030200126073.png) |
+| Run-time  analysis                                           |                                                              | ![image-20231112140414855](./README/image-20231112140414855.png) |
+| Run-time analysis comparative                                |                                                              | ![image-20240809095931048](./README/image-20240809095931048.png) |
 
 
 
