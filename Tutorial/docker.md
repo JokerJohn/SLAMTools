@@ -114,7 +114,14 @@ colcon build --symlink-install --packages-select mapping_msgs msfl_msgs shm_msgs
 # 再编译 mapping_manager
 colcon build --symlink-install --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
 
-colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
+#colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
+colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON" -DCMAKE_BUILD_TYPE=Release
+
+#run map manager
+./install/mapping_manager/start.sh
+
+#before play rosbag, we should source the workspace
+
 ```
 
 
@@ -144,11 +151,24 @@ output_bags:
 
 #ros2 bag convert -i /autocity/data/test1/1/sensor_data/check/check_0.db3 -o /autocity/data/test1/1/sensor_data/check/convert_mcap.yaml 
 
-# then convert mcp to rosbag
+# then convert mcp to rosbag, install first
+apt install python3-pip
+pip3 install rosbags
 
 rosbags-convert --src check_0_mcap/ --dst /autocity/data/test1/2/sensor_data/check/output.bag --dst-typestore ros1_noetic
 
 ```
+
+#### ros1 bag convert to ros2
+
+```bash
+# the direct command
+rosbags-convert --src outdoor_Mainbuilding_100Hz_2020-12-24-16-46-29.bag --dst outdoor_Mainbuilding_100Hz_2020-12-24-16-46-29 
+```
+
+
+
+
 
 
 

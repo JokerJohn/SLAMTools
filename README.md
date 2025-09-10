@@ -1,6 +1,6 @@
 # SLAMTools
 
-This is a script toolkit for SLAM research, including but not limited to various plotting functions, ROS bag processing, and more.
+This is a script toolkit for SLAM research, including but not limited to various plotting functions, ROS bag processing.
 
 | Function                                                     | scripts                                                      | demo                                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
