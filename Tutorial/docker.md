@@ -53,6 +53,8 @@ docker中的对应目录：~/auto_ws，数据文件：/autocity/data
 创建好进入这个docker
 
 ```bash
+#查看镜像
+docker ps -a  --size
 
 # 启动这个已存在的容器（后台运行）
 docker start ros2_auto
@@ -61,11 +63,46 @@ docker start ros2_auto
 docker exec -it ros2_auto /bin/bash
 
 
-
 #if we want to process this data folder which mounted in docker in my ubuntu
 ls -ld   ~/data
 sudo chown -R $USER:$USER ~/data
 ```
+
+
+
+how to set if you do not see the rviz run,check the docker
+
+```bash
+#1.在宿主机（非容器）检查 X 是否可用
+echo $DISPLAY        # 通常是 :0 或 :1
+xhost                # 看当前访问控制
+
+#2.在容器里确认 Qt 插件已装 & 环境变量
+echo $DISPLAY        # 应该继承为 :0 或 unix/:0
+echo $XAUTHORITY     # 通常应为 /root/.Xauthority 或 /home/xxx/.Xauthority
+ls /usr/lib/*/qt*/plugins/platforms | grep xcb
+
+#3.看到 “No protocol specified / could not connect to display :0” 基本就是 X11 授权问题，按下文修。
+
+#**宿主机：**允许本地容器访问 X，并准备授权文件
+# 1.允许本地用户访问 X 服务（仅本机）
+xhost +local:
+
+# 找到本机的 Xauthority（常见是 ~/.Xauthority）
+echo $XAUTHORITY  # 若为空，通常就是 ~/.Xauthority
+
+#2启动容器：（把必要的挂载和环境都带上）
+docker run -it --rm \
+  -e DISPLAY=$DISPLAY \
+  -e QT_X11_NO_MITSHM=1 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  -v $XAUTHORITY:/root/.Xauthority:ro \
+  --name ros2_rviz \
+  <你的镜像> bash
+
+```
+
+
 
 ```
 # 基础镜像：Ubuntu 22.04 + ROS 2 Humble
@@ -101,6 +138,7 @@ apt install -y nlohmann-json3-dev
 ```
 
 ```bash
+# if you do not see output of the mapping process or the rviz no results
 export ROS_LOCALHOST_ONLY=1
 
 source install/setup.bash
@@ -112,9 +150,8 @@ rm -rf build/ install/ log/
 colcon build --symlink-install --packages-select mapping_msgs msfl_msgs shm_msgs
 
 # 再编译 mapping_manager
-colcon build --symlink-install --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
+# colcon build --symlink-install --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
 
-#colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON"
 colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_EIGEN=ON" -DCMAKE_BUILD_TYPE=Release
 
 #run map manager
@@ -123,6 +160,17 @@ colcon build --packages-select mapping_manager --cmake-args "-DGTSAM_USE_SYSTEM_
 #before play rosbag, we should source the workspace
 
 ```
+
+
+
+```
+#befroe compile map manager, we should clone the front_end record and backend lib to this 'mapping_manager/libs'
+# or y7ou will encounter some errors
+
+#error: error: ‘pcl_isfinite’ was not declared in this scope
+```
+
+![image-20250915102721362](docker/image-20250915102721362.png)
 
 
 
@@ -155,6 +203,10 @@ output_bags:
 apt install python3-pip
 pip3 install rosbags
 
+
+# source the related msg
+source ~/auto_ws/install/setup.bash
+
 rosbags-convert --src check_0_mcap/ --dst /autocity/data/test1/2/sensor_data/check/output.bag --dst-typestore ros1_noetic
 
 ```
@@ -168,7 +220,27 @@ rosbags-convert --src outdoor_Mainbuilding_100Hz_2020-12-24-16-46-29.bag --dst o
 
 
 
+## ros bag 压缩 to db3
 
+```
+cat > /home/auto/data/kengzi_line17/convert_out.yaml <<'YAML'
+output_bags:
+  - uri: /home/auto/data/kengzi_line17/db3_out
+    storage_id: sqlite3
+    all: true
+YAML
+
+
+
+# zstd -d mcap_zstd_20251023_13_55bag_0.mcap.zstd -o mcap_zstd_20251023_13_55bag_0.mcap
+
+# we can slao directly merge the db, it will decompress the zstd first, and merge to db
+ros2 bag convert   -i /autocity/data/kengzi-pc105/mcap_zstd_bag_2025_11_05-13_41_29 mcap   -o /autocity/data/kengzi-pc105/mcap_zstd_bag_2025_11_05-13_41_29/convert_out.yaml
+
+
+
+ros2 bag convert -i /home/auto/data/luohu_aokang_nec575_20251023_13_55bag/mcap_zstd_20251023_13_55bag_0.mcap mcap   -o /home/auto/data/luohu_aokang_nec575_20251023_13_55bag/convert_out.yaml
+```
 
 
 
@@ -217,3 +289,60 @@ rm -rf build/*
 mkdir build && cd build
 ```
 
+
+
+### rviz issue
+
+
+
+![image-20251013110658070](docker/image-20251013110658070.png)
+
+
+
+```
+# 在宿主机执行
+export DISPLAY=${DISPLAY:-:0}
+XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist "$DISPLAY" | sed -e 's/^..../ffff/' | xauth -f "$XAUTH" nmerge -
+
+#允许本机的 root/本地用户访问 X（更安全的做法）
+xhost +SI:localuser:root
+```
+
+
+
+
+
+### codex isseu
+
+```bash
+先清理环境变量，再只启用 HTTP 代理（如果你用的是 Clash/sing-box 的 7890 HTTP 端口）：
+# 清理所有代理变量
+unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY no_proxy NO_PROXY
+
+# 仅设置 HTTP/HTTPS 代理（示例：Clash 默认 7890）
+export http_proxy="http://127.0.0.1:7890"
+export https_proxy="http://127.0.0.1:7890"
+export HTTP_PROXY="$http_proxy"
+export HTTPS_PROXY="$https_proxy"
+# 不要再设置 no_proxy（尤其不要包含 api.openai.com）
+
+curl -I https://api.openai.com/v1/models   # 正常应返回 401（已联通）
+
+
+```
+
+若你的 SOCKS5 在 7891，改用：
+
+```
+unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY
+export all_proxy="socks5://127.0.0.1:7891"
+export ALL_PROXY="$all_proxy"
+```
+
+**切记不要** 同时混用 `http_proxy` 和 `all_proxy`。
+
+
+
+**从同一个终端**启动 VSCode，这样 VSCode 与扩展会继承你刚才的代理变量：
